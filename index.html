@@ -11,6 +11,8 @@
     <title>TechNovaphy Blog | Expert Tech Insights, IT Infrastructure & Web Development</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -55,9 +57,7 @@
         .blog-hero { padding: 60px 0 40px; text-align: center; }
         .blog-hero h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
         .blog-hero .gradient-text { background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .blog-hero p { font-size: 1.1rem; opacity: 0.8; max-width: 700px; margin: 0 auto 2rem; }
-        .lead-magnet-btn { display: inline-block; padding: 0.9rem 2.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); color: var(--dark); font-weight: 700; border-radius: 50px; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s; }
-        .lead-magnet-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 242, 255, 0.3); }
+        .blog-hero p { font-size: 1.1rem; opacity: 0.8; max-width: 700px; margin: 0 auto; }
 
         .blog-controls { display: flex; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
         .search-box { flex: 1; min-width: 250px; padding: 0.8rem 1rem; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
@@ -74,7 +74,7 @@
         .blog-category { background: rgba(0, 242, 255, 0.1); color: var(--primary); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         .blog-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; margin-bottom: 0.8rem; line-height: 1.4; }
         .blog-excerpt { opacity: 0.8; margin-bottom: 1.5rem; line-height: 1.6; }
-        .read-more { color: var(--primary); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; transition: gap 0.3s; cursor: pointer; background: none; border: none; font-size: inherit; font-family: inherit; }
+        .read-more { color: var(--primary); font-weight: 600; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-size: inherit; font-family: inherit; transition: gap 0.3s; }
         .read-more:hover { gap: 0.8rem; }
 
         .full-article { display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
@@ -103,21 +103,15 @@
         .related-card:hover { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
         .related-card h5 { font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 0.3rem; }
 
-        .lead-magnet-section { background: linear-gradient(135deg, rgba(0, 242, 255, 0.05), rgba(112, 0, 255, 0.05)); border: 1px solid var(--primary); border-radius: 16px; padding: 3rem; margin: 4rem 0; text-align: center; }
-        .lead-magnet-section h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; margin-bottom: 1rem; }
-        .lead-magnet-section p { max-width: 600px; margin: 0 auto 2rem; opacity: 0.8; }
-        .lead-magnet-form { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-        .lead-magnet-form input { padding: 0.8rem 1.2rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: var(--text); min-width: 220px; flex: 1; }
-        .lead-magnet-form button { padding: 0.8rem 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); color: var(--dark); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.3s; }
-        .lead-magnet-form button:hover { transform: scale(1.05); }
-
-        .newsletter-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; margin: 3rem 0; text-align: center; }
-        .newsletter-section h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .newsletter-section p { opacity: 0.8; margin-bottom: 1.5rem; }
+        /* Newsletter Section */
+        .newsletter-section { background: linear-gradient(135deg, rgba(0, 242, 255, 0.05), rgba(112, 0, 255, 0.05)); border: 1px solid var(--primary); border-radius: 16px; padding: 3rem; margin: 4rem 0; text-align: center; }
+        .newsletter-section h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .newsletter-section p { opacity: 0.8; margin-bottom: 1.5rem; max-width: 600px; margin: 0 auto 1.5rem; }
         .newsletter-form { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-        .newsletter-form input { padding: 0.8rem 1.2rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: var(--text); min-width: 250px; }
-        .newsletter-form button { padding: 0.8rem 2rem; background: var(--primary); color: var(--dark); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-        .newsletter-form button:hover { background: var(--accent); color: #fff; }
+        .newsletter-form input { padding: 0.8rem 1.2rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: var(--text); min-width: 280px; flex: 1; max-width: 400px; }
+        .newsletter-form button { padding: 0.8rem 2.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); color: var(--dark); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.3s; }
+        .newsletter-form button:hover { transform: scale(1.05); }
+        .newsletter-form button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         footer { background: rgba(5, 8, 18, 0.8); border-top: 1px solid var(--border); padding: 3rem 0; margin-top: 4rem; }
         .footer-content { text-align: center; }
@@ -128,11 +122,9 @@
             .blog-grid { grid-template-columns: 1fr; }
             .blog-controls { flex-direction: column; align-items: stretch; }
             .search-box { min-width: auto; }
-            .lead-magnet-section { padding: 2rem 1.5rem; }
-            .lead-magnet-form { flex-direction: column; align-items: center; }
-            .lead-magnet-form input { width: 100%; }
+            .newsletter-section { padding: 2rem 1.5rem; }
             .newsletter-form { flex-direction: column; align-items: center; }
-            .newsletter-form input { width: 100%; }
+            .newsletter-form input { width: 100%; max-width: none; }
             nav ul { display: none; }
             .author-bio { flex-direction: column; text-align: center; }
         }
@@ -151,14 +143,15 @@
         </div>
     </nav>
 
+    <!-- Blog Hero -->
     <section class="blog-hero">
         <div class="container">
             <h1>Tech Tips & Industry <span class="gradient-text">Insights</span></h1>
             <p>Stay updated with the latest in IT infrastructure, web development, cybersecurity, and tech business growth. Written by our expert team.</p>
-            <a href="#lead-magnet" class="lead-magnet-btn"><i class="fas fa-download"></i> Get Free IT Audit Guide</a>
         </div>
     </section>
 
+    <!-- Search & Filter -->
     <section id="blog">
         <div class="container">
             <div class="blog-controls">
@@ -172,41 +165,29 @@
         </div>
     </section>
 
+    <!-- Blog Grid -->
     <section>
         <div class="container">
             <div class="blog-grid" id="blogGrid"></div>
         </div>
     </section>
 
-    <section id="lead-magnet">
-        <div class="container">
-            <div class="lead-magnet-section">
-                <h2>🚀 Get Your Free IT Infrastructure Audit Guide</h2>
-                <p>Download our comprehensive guide and discover hidden vulnerabilities in your IT setup. Worth KES 50,000 — absolutely free.</p>
-                <form class="lead-magnet-form" id="leadForm">
-                    <input type="text" placeholder="Your Name" required id="leadName">
-                    <input type="email" placeholder="Your Email" required id="leadEmail">
-                    <button type="submit"><i class="fas fa-download"></i> Download Now</button>
-                </form>
-                <div id="leadMessage" style="margin-top: 1rem; font-weight: 600; display: none;"></div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Newsletter Section Only -->
     <section>
         <div class="container">
             <div class="newsletter-section">
                 <h3>📬 Subscribe to Our Newsletter</h3>
-                <p>Get the latest tech insights, tips, and exclusive offers delivered to your inbox.</p>
+                <p>Get the latest tech insights, IT tips, and exclusive offers delivered to your inbox — absolutely free.</p>
                 <form class="newsletter-form" id="newsletterForm">
-                    <input type="email" placeholder="Your Email" required id="newsletterEmail">
-                    <button type="submit">Subscribe</button>
+                    <input type="email" placeholder="Enter your email address" required id="newsletterEmail">
+                    <button type="submit" id="newsletterBtn">Subscribe</button>
                 </form>
                 <div id="newsletterMessage" style="margin-top: 1rem; font-weight: 600; display: none;"></div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -301,7 +282,7 @@
                 <div class="highlight-box">
                     <strong>🔐 Ready to secure your business?</strong>
                     <p>Don't wait until you're a victim. Our security team can perform a comprehensive risk assessment and implement a tailored security framework for your organization.</p>
-                    <p><a href="/#contact" style="color: var(--primary);">Contact our security team</a> for a free risk assessment and get a detailed security roadmap.</p>
+                    <p><a href="/#contact" style="color: var(--primary);">Contact our security team</a> for a free risk assessment.</p>
                 </div>
             `,
             date: "June 20, 2026",
@@ -684,11 +665,10 @@
                 `;
                 blogGrid.appendChild(card);
 
-                // Add click handler for "Read More" button
+                // Click handler for "Read More"
                 const readMore = card.querySelector('.read-more');
                 const fullArticle = card.querySelector('.full-article');
-                readMore.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent any default action
+                readMore.addEventListener('click', function() {
                     const isActive = fullArticle.classList.toggle('active');
                     this.textContent = isActive ? 'Close Article ↑' : 'Read Article →';
                     if (isActive) {
@@ -696,13 +676,12 @@
                     }
                 });
 
-                // Related cards click handler
+                // Related cards click
                 card.querySelectorAll('.related-card').forEach(rel => {
                     rel.addEventListener('click', function() {
                         const id = parseInt(this.dataset.id);
                         const targetPost = posts.find(p => p.id === id);
                         if (targetPost) {
-                            // Close all open articles first
                             document.querySelectorAll('.blog-card').forEach(c => {
                                 const a = c.querySelector('.full-article');
                                 const link = c.querySelector('.read-more');
@@ -711,7 +690,6 @@
                                     link.textContent = 'Read Article →';
                                 }
                             });
-                            // Find the card with this id and open it
                             const targetCard = Array.from(document.querySelectorAll('.blog-card'))
                                 .find(c => c.querySelector(`.read-more[data-id="${id}"]`));
                             if (targetCard) {
@@ -763,45 +741,60 @@
         }
 
         // ============================================================
-        //  LEAD MAGNET FORM
+        //  EMAILJS CONFIGURATION – REPLACE WITH YOUR KEYS
         // ============================================================
-        document.getElementById('leadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('leadName').value.trim();
-            const email = document.getElementById('leadEmail').value.trim();
-            const msg = document.getElementById('leadMessage');
-            if (!name || !email) {
-                msg.style.display = 'block';
-                msg.style.color = '#f87171';
-                msg.textContent = 'Please fill in all fields.';
-                return;
-            }
-            msg.style.display = 'block';
-            msg.style.color = '#34d399';
-            msg.textContent = `✅ Thank you ${name}! Your free audit guide has been sent to ${email}. Check your inbox.`;
-            this.reset();
-            setTimeout(() => { msg.style.display = 'none'; }, 6000);
-        });
+        const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+        const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+        const NEWSLETTER_TEMPLATE_ID = 'template_newsletter';
+
+        // Initialize EmailJS
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            console.log('✅ EmailJS initialized');
+        }
 
         // ============================================================
-        //  NEWSLETTER FORM
+        //  NEWSLETTER FORM HANDLER
         // ============================================================
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('newsletterEmail').value.trim();
             const msg = document.getElementById('newsletterMessage');
+            const btn = document.getElementById('newsletterBtn');
+
             if (!email) {
                 msg.style.display = 'block';
                 msg.style.color = '#f87171';
-                msg.textContent = 'Please enter your email.';
+                msg.textContent = 'Please enter your email address.';
                 return;
             }
-            msg.style.display = 'block';
-            msg.style.color = '#34d399';
-            msg.textContent = `✅ Subscribed! You'll receive our latest tech insights at ${email}.`;
-            this.reset();
-            setTimeout(() => { msg.style.display = 'none'; }, 5000);
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+
+            const templateParams = {
+                from_name: email.split('@')[0],
+                to_email: email
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, NEWSLETTER_TEMPLATE_ID, templateParams)
+                .then(function(response) {
+                    msg.style.display = 'block';
+                    msg.style.color = '#34d399';
+                    msg.textContent = `✅ Subscribed! You'll receive our latest tech insights at ${email}.`;
+                    document.getElementById('newsletterForm').reset();
+                }, function(error) {
+                    console.error('EmailJS error:', error);
+                    msg.style.display = 'block';
+                    msg.style.color = '#f87171';
+                    msg.textContent = '❌ Subscription failed. Please try again.';
+                })
+                .finally(function() {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Subscribe';
+                    setTimeout(() => { msg.style.display = 'none'; }, 5000);
+                });
         });
     </script>
 </body>
-</html>
+    </html>
