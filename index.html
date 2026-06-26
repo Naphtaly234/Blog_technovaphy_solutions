@@ -741,16 +741,22 @@
         }
 
         // ============================================================
-        //  EMAILJS CONFIGURATION – REPLACE WITH YOUR KEYS
+        //  EMAILJS CONFIGURATION – USING YOUR KEYS
         // ============================================================
         const EMAILJS_PUBLIC_KEY = '2a63sraNwt28lQWml';
         const EMAILJS_SERVICE_ID = 'service_fqc51hs';
         const NEWSLETTER_TEMPLATE_ID = 'template_hkn3vvb';
 
+        console.log('🔑 EmailJS Public Key:', EMAILJS_PUBLIC_KEY);
+        console.log('📦 Service ID:', EMAILJS_SERVICE_ID);
+        console.log('📝 Template ID:', NEWSLETTER_TEMPLATE_ID);
+
         // Initialize EmailJS
         if (typeof emailjs !== 'undefined') {
             emailjs.init(EMAILJS_PUBLIC_KEY);
             console.log('✅ EmailJS initialized');
+        } else {
+            console.error('❌ EmailJS SDK not loaded. Check script tag.');
         }
 
         // ============================================================
@@ -758,7 +764,9 @@
         // ============================================================
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('newsletterEmail').value.trim();
+
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput.value.trim();
             const msg = document.getElementById('newsletterMessage');
             const btn = document.getElementById('newsletterBtn');
 
@@ -769,32 +777,44 @@
                 return;
             }
 
+            // Disable button and show spinner
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
 
+            // Prepare template parameters – adjust if your template uses different field names
             const templateParams = {
-                from_name: email.split('@')[0],
-                to_email: email
+                to_email: email,                // Sends to the subscriber
+                from_name: email.split('@')[0], // Optional: use part of email as name
+                // If your template expects 'email' instead of 'to_email', change here:
+                // email: email
             };
+
+            console.log('📤 Sending newsletter subscription with params:', templateParams);
 
             emailjs.send(EMAILJS_SERVICE_ID, NEWSLETTER_TEMPLATE_ID, templateParams)
                 .then(function(response) {
+                    console.log('✅ EmailJS success:', response);
                     msg.style.display = 'block';
                     msg.style.color = '#34d399';
                     msg.textContent = `✅ Subscribed! You'll receive our latest tech insights at ${email}.`;
-                    document.getElementById('newsletterForm').reset();
-                }, function(error) {
-                    console.error('EmailJS error:', error);
+                    emailInput.value = '';
+                })
+                .catch(function(error) {
+                    console.error('❌ EmailJS error:', error);
+                    let errorMsg = '❌ Subscription failed. Please try again.';
+                    if (error.text) {
+                        errorMsg += ' Error: ' + error.text;
+                    }
                     msg.style.display = 'block';
                     msg.style.color = '#f87171';
-                    msg.textContent = '❌ Subscription failed. Please try again.';
+                    msg.textContent = errorMsg;
                 })
                 .finally(function() {
                     btn.disabled = false;
                     btn.innerHTML = 'Subscribe';
-                    setTimeout(() => { msg.style.display = 'none'; }, 5000);
+                    setTimeout(() => { msg.style.display = 'none'; }, 6000);
                 });
         });
     </script>
 </body>
-    </html>
+                    </html>
