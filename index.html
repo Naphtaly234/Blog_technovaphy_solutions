@@ -6,9 +6,8 @@
     <title>TechNovaphy Blog | Expert Tech Insights, IT Infrastructure & Web Development</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- EmailJS CDN - MULTIPLE FALLBACKS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js" defer></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js" defer></script>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -27,21 +26,44 @@
             line-height: 1.7;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        nav { background: rgba(10, 14, 39, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; padding: 1rem 0; }
+
+        /* NAVIGATION */
+        nav {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
         nav .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         nav ul { display: flex; gap: 2rem; list-style: none; }
         nav a { color: var(--text); text-decoration: none; transition: color 0.3s; }
         nav a:hover { color: var(--primary); }
+
+        /* HERO */
         .blog-hero { padding: 60px 0 40px; text-align: center; }
         .blog-hero h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
         .blog-hero .gradient-text { background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .blog-hero p { font-size: 1.1rem; opacity: 0.8; max-width: 700px; margin: 0 auto; }
+
+        /* BLOG CONTROLS */
         .blog-controls { display: flex; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
         .search-box { flex: 1; min-width: 250px; padding: 0.8rem 1rem; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
         .filter-btn { padding: 0.8rem 1.5rem; background: rgba(0, 242, 255, 0.1); border: 1px solid var(--border); border-radius: 8px; color: var(--text); cursor: pointer; transition: all 0.3s; }
         .filter-btn:hover { border-color: var(--primary); background: rgba(0, 242, 255, 0.2); }
         .filter-btn.active { background: var(--primary); color: var(--dark); border-color: var(--primary); }
+
+        /* BLOG GRID */
         .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
         .blog-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s; cursor: pointer; }
         .blog-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 242, 255, 0.1); }
@@ -53,6 +75,7 @@
         .blog-excerpt { opacity: 0.8; margin-bottom: 1.5rem; line-height: 1.6; }
         .read-more { color: var(--primary); font-weight: 600; background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-size: inherit; font-family: inherit; transition: gap 0.3s; }
         .read-more:hover { gap: 0.8rem; }
+
         .full-article { display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
         .full-article.active { display: block; }
         .article-body { font-size: 1.05rem; line-height: 1.9; }
@@ -62,38 +85,137 @@
         .article-body ul, .article-body ol { margin: 1.5rem 0 1.5rem 2rem; }
         .article-body li { margin-bottom: 0.8rem; }
         .highlight-box { background: rgba(0, 242, 255, 0.05); border-left: 3px solid var(--primary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; }
+
         .author-bio { display: flex; gap: 1.5rem; align-items: center; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border); }
         .author-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: var(--dark); flex-shrink: 0; }
         .author-info h4 { font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 0.3rem; }
         .author-info p { opacity: 0.8; font-size: 0.95rem; }
+
         .share-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0; }
         .share-btn { padding: 0.6rem 1.2rem; background: rgba(0, 242, 255, 0.1); border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
         .share-btn:hover { background: var(--primary); color: var(--dark); border-color: var(--primary); }
+
         .related-posts { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
         .related-posts h4 { font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 1rem; }
         .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
         .related-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1rem; border-radius: 8px; transition: all 0.3s; cursor: pointer; }
         .related-card:hover { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
         .related-card h5 { font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 0.3rem; }
-        .newsletter-section { background: linear-gradient(135deg, rgba(0, 242, 255, 0.05), rgba(112, 0, 255, 0.05)); border: 1px solid var(--primary); border-radius: 16px; padding: 3rem; margin: 4rem 0; text-align: center; }
-        .newsletter-section h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
-        .newsletter-section p { opacity: 0.8; margin-bottom: 1.5rem; max-width: 600px; margin: 0 auto 1.5rem; }
-        .newsletter-form { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-        .newsletter-form input { padding: 0.8rem 1.2rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: var(--text); min-width: 280px; flex: 1; max-width: 400px; }
-        .newsletter-form button { padding: 0.8rem 2.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); color: var(--dark); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.3s; }
-        .newsletter-form button:hover { transform: scale(1.05); }
-        .newsletter-form button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* ===== CONTACT / NEWSLETTER SECTION ===== */
+        .contact-section {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.05), rgba(112, 0, 255, 0.05));
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+        .contact-section h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .contact-section .subtitle {
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .contact-form .form-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .contact-form .form-row > * {
+            flex: 1;
+            min-width: 200px;
+        }
+        .contact-form label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .contact-form .submit-btn {
+            padding: 0.9rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--dark);
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-size: 1rem;
+            align-self: center;
+            min-width: 200px;
+        }
+        .contact-form .submit-btn:hover { transform: scale(1.05); }
+        .contact-form .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .form-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        .form-status.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .form-status.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
         footer { background: rgba(5, 8, 18, 0.8); border-top: 1px solid var(--border); padding: 3rem 0; margin-top: 4rem; }
         .footer-content { text-align: center; }
         .footer-content p { opacity: 0.6; }
+
         @media (max-width: 768px) {
             .blog-hero h1 { font-size: 2rem; }
             .blog-grid { grid-template-columns: 1fr; }
             .blog-controls { flex-direction: column; align-items: stretch; }
             .search-box { min-width: auto; }
-            .newsletter-section { padding: 2rem 1.5rem; }
-            .newsletter-form { flex-direction: column; align-items: center; }
-            .newsletter-form input { width: 100%; max-width: none; }
+            .contact-section { padding: 2rem 1.5rem; }
+            .contact-form .form-row { flex-direction: column; }
+            .contact-form .form-row > * { min-width: auto; }
             nav ul { display: none; }
             .author-bio { flex-direction: column; text-align: center; }
         }
@@ -112,6 +234,7 @@
         </div>
     </nav>
 
+    <!-- HERO -->
     <section class="blog-hero">
         <div class="container">
             <h1>Tech Tips & Industry <span class="gradient-text">Insights</span></h1>
@@ -119,6 +242,7 @@
         </div>
     </section>
 
+    <!-- BLOG CONTROLS -->
     <section id="blog">
         <div class="container">
             <div class="blog-controls">
@@ -132,26 +256,56 @@
         </div>
     </section>
 
+    <!-- BLOG GRID -->
     <section>
         <div class="container">
             <div class="blog-grid" id="blogGrid"></div>
         </div>
     </section>
 
+    <!-- ===== CONTACT / NEWSLETTER SECTION ===== -->
     <section>
         <div class="container">
-            <div class="newsletter-section">
-                <h3>📬 Subscribe to Our Newsletter</h3>
-                <p>Get the latest tech insights, IT tips, and exclusive offers delivered to your inbox — absolutely free.</p>
-                <form class="newsletter-form" id="newsletterForm">
-                    <input type="email" placeholder="Enter your email address" required id="newsletterEmail">
-                    <button type="submit" id="newsletterBtn">Subscribe</button>
+            <div class="contact-section">
+                <h3>📬 Get in Touch</h3>
+                <p class="subtitle">Have a question, project idea, or want to subscribe to our newsletter? Fill out the form below and we'll get back to you within 24 hours.</p>
+
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div>
+                            <label for="from_name">Your Name *</label>
+                            <input type="text" id="from_name" placeholder="Daniel Naphtaly" required>
+                        </div>
+                        <div>
+                            <label for="company_name">Company Name</label>
+                            <input type="text" id="company_name" placeholder="Your Company">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <label for="to_email">Email Address *</label>
+                            <input type="email" id="to_email" placeholder="your@email.com" required>
+                        </div>
+                        <div>
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" id="phone_number" placeholder="+254 799 269 573">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="message">Message / Newsletter Subscription</label>
+                        <textarea id="message" placeholder="Tell us about your project, or just say hi! To subscribe to our newsletter, type 'Subscribe me to the newsletter'."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="contactBtn">
+                        <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i> Send Message
+                    </button>
                 </form>
-                <div id="newsletterMessage" style="margin-top: 1rem; font-weight: 600; display: none;"></div>
+
+                <div class="form-status" id="formStatus"></div>
             </div>
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -162,20 +316,80 @@
     </footer>
 
     <script>
-        // Blog data and rendering (same as before)
+        // ============================================================
+        //  BLOG DATA – 6 ARTICLES
+        // ============================================================
         const posts = [{
             id: 1,
             title: "5 Critical Security Mistakes Your Business Is Making Right Now",
             category: "security",
             excerpt: "Most businesses don't realize they're vulnerable until it's too late. Here are the 5 most common security mistakes we see — and how to fix them today.",
-            fullContent: `<h2>Introduction: The State of Cybersecurity in 2026</h2><p>Cybersecurity is not just an IT issue—it's a business survival issue...</p>`,
+            fullContent: `<h2>Introduction: The State of Cybersecurity in 2026</h2><p>Cybersecurity is not just an IT issue—it's a business survival issue. In Kenya, cybercrime has risen dramatically in the last five years, with ransomware attacks targeting small and medium businesses becoming increasingly common. Yet, many organizations still operate with a false sense of security, believing that "it won't happen to us."</p><p>According to recent statistics, 60% of small businesses that suffer a cyberattack go out of business within six months. The average cost of a data breach in East Africa is now estimated at KES 8 million, and that's before factoring in the reputational damage and loss of customer trust.</p><h2>1. Weak Password Policies</h2><p>Using default passwords or simple passwords like "admin123" is still shockingly common. Implement a password manager and MFA.</p><h2>2. Outdated Software</h2><p>Failing to patch known vulnerabilities is one of the leading causes of cyberattacks.</p><div class="highlight-box"><strong>🔐 Ready to secure your business?</strong><p><a href="/#contact" style="color: var(--primary);">Contact our security team</a> for a free risk assessment.</p></div>`,
             date: "June 20, 2026",
             readTime: "8 min read",
             author: "Daniel Naphtaly",
             avatar: "DN",
             image: "🛡️"
+        }, {
+            id: 2,
+            title: "Why Your Website Needs Maintenance (And What That Means)",
+            category: "web-development",
+            excerpt: "Think you only update your website when adding new features? Here's why ongoing maintenance is critical.",
+            fullContent: `<h2>Introduction</h2><p>A website is not a brochure—it's a dynamic, living system.</p><h2>Security Vulnerabilities</h2><p>Hackers constantly scan for websites running outdated CMS versions.</p><h2>Performance Degradation</h2><p>Over time, websites slow down. Regular maintenance keeps your site fast.</p><div class="highlight-box"><strong>💡 A well-maintained website is your best marketing asset.</strong><p><a href="/#contact" style="color: var(--primary);">Talk to us about our maintenance plans.</a></p></div>`,
+            date: "June 18, 2026",
+            readTime: "7 min read",
+            author: "Daniel Naphtaly",
+            avatar: "DN",
+            image: "💻"
+        }, {
+            id: 3,
+            title: "How To Choose Between a Custom App, Website, or SaaS Solution",
+            category: "business-growth",
+            excerpt: "Confused about which solution fits your business? We break down the pros, cons, and costs.",
+            fullContent: `<h2>Introduction</h2><p>When you need to digitize a business process, you have three main options.</p><h2>Custom Web Application</h2><p>Bespoke software for unique workflows. Higher upfront cost, complete control.</p><h2>SaaS Solution</h2><p>Low upfront cost, quick setup, but limited customization.</p><div class="highlight-box"><strong>🛠️ Not sure which fits you? We can help!</strong><p><a href="/#contact" style="color: var(--primary);">Book a free consultation.</a></p></div>`,
+            date: "June 15, 2026",
+            readTime: "6 min read",
+            author: "Daniel Naphtaly",
+            avatar: "DN",
+            image: "⚡"
+        }, {
+            id: 4,
+            title: "Cloud Migration Guide: When, Why, and How to Move Your Systems",
+            category: "it-infrastructure",
+            excerpt: "Thinking about moving to the cloud? This guide covers everything you need to know.",
+            fullContent: `<h2>Introduction</h2><p>Cloud migration is a strategic move, not just a technical one.</p><h2>When to Move to the Cloud</h2><ul><li>Your hardware is aging</li><li>You need remote access</li><li>You want to scale quickly</li></ul><div class="highlight-box"><strong>☁️ Ready to move to the cloud?</strong><p><a href="/#contact" style="color: var(--primary);">Talk to our cloud experts.</a></p></div>`,
+            date: "June 12, 2026",
+            readTime: "8 min read",
+            author: "Daniel Naphtaly",
+            avatar: "DN",
+            image: "🌐"
+        }, {
+            id: 5,
+            title: "Mobile-First Design: Why Every Business Needs It",
+            category: "web-development",
+            excerpt: "Over 70% of web traffic is mobile. Here's why your website must be mobile-first.",
+            fullContent: `<h2>Introduction</h2><p>If your website isn't optimized for mobile, you're losing customers.</p><h2>What Is Mobile-First Design?</h2><p>Designing for the smallest screen first, then scaling up.</p><div class="highlight-box"><strong>📱 Ready to go mobile-first?</strong><p><a href="/#contact" style="color: var(--primary);">Get a free mobile audit.</a></p></div>`,
+            date: "June 10, 2026",
+            readTime: "5 min read",
+            author: "Daniel Naphtaly",
+            avatar: "DN",
+            image: "📱"
+        }, {
+            id: 6,
+            title: "How Much Should You Budget for Website Development in 2026?",
+            category: "business-growth",
+            excerpt: "Breaking down realistic costs for different types of web projects.",
+            fullContent: `<h2>Introduction</h2><p>Website development costs vary widely.</p><h2>Basic Brochure Website</h2><p>KES 60,000 – 150,000</p><h2>E-commerce Website</h2><p>KES 300,000 – 800,000</p><div class="highlight-box"><strong>💡 Get a custom quote based on your specific needs.</strong><p><a href="/#contact" style="color: var(--primary);">Contact us</a> for a free consultation.</p></div>`,
+            date: "June 8, 2026",
+            readTime: "9 min read",
+            author: "Daniel Naphtaly",
+            avatar: "DN",
+            image: "💰"
         }];
 
+        // ============================================================
+        //  RENDER BLOG
+        // ============================================================
         const blogGrid = document.getElementById('blogGrid');
         let activeCategory = 'all';
 
@@ -185,138 +399,217 @@
             filtered.forEach(post => {
                 const card = document.createElement('div');
                 card.className = 'blog-card';
-                card.innerHTML = `<div class="blog-image">${post.image}</div><div class="blog-content"><div class="blog-meta"><span class="blog-category">${post.category.replace('-', ' ').toUpperCase()}</span><span>${post.readTime}</span><span>${post.date}</span></div><h3>${post.title}</h3><p class="blog-excerpt">${post.excerpt}</p><button class="read-more" data-id="${post.id}">Read Article →</button><div class="full-article" id="article-${post.id}"><div class="article-body">${post.fullContent}</div></div></div>`;
+                card.dataset.category = post.category;
+                card.innerHTML = `
+                    <div class="blog-image">${post.image}</div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-category">${post.category.replace('-', ' ').toUpperCase()}</span>
+                            <span>${post.readTime}</span>
+                            <span>${post.date}</span>
+                        </div>
+                        <h3>${post.title}</h3>
+                        <p class="blog-excerpt">${post.excerpt}</p>
+                        <button class="read-more" data-id="${post.id}">Read Article →</button>
+                        <div class="full-article" id="article-${post.id}">
+                            <div class="article-body">${post.fullContent}</div>
+                            <div class="author-bio">
+                                <div class="author-avatar">${post.avatar}</div>
+                                <div class="author-info">
+                                    <h4>${post.author}</h4>
+                                    <p>Lead IT Consultant at TechNovaphy. Passionate about helping businesses leverage technology securely.</p>
+                                </div>
+                            </div>
+                            <div class="share-buttons">
+                                <a href="https://wa.me/?text=${encodeURIComponent(post.title)}" target="_blank" class="share-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}" target="_blank" class="share-btn"><i class="fab fa-twitter"></i> Twitter</a>
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                            </div>
+                            <div class="related-posts">
+                                <h4>📖 You might also like</h4>
+                                <div class="related-grid">
+                                    ${posts.filter(p => p.id !== post.id).slice(0, 3).map(rel => `
+                                        <div class="related-card" data-id="${rel.id}">
+                                            <h5>${rel.title}</h5>
+                                            <span style="font-size:0.8rem; opacity:0.7;">${rel.date}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 blogGrid.appendChild(card);
+
+                // Read More toggle
+                const readMore = card.querySelector('.read-more');
+                const fullArticle = card.querySelector('.full-article');
+                readMore.addEventListener('click', function() {
+                    const isActive = fullArticle.classList.toggle('active');
+                    this.textContent = isActive ? 'Close Article ↑' : 'Read Article →';
+                    if (isActive) fullArticle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+
+                // Related cards
+                card.querySelectorAll('.related-card').forEach(rel => {
+                    rel.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        const targetPost = posts.find(p => p.id === id);
+                        if (targetPost) {
+                            document.querySelectorAll('.blog-card').forEach(c => {
+                                const a = c.querySelector('.full-article');
+                                const link = c.querySelector('.read-more');
+                                if (a && a.classList.contains('active')) {
+                                    a.classList.remove('active');
+                                    link.textContent = 'Read Article →';
+                                }
+                            });
+                            const targetCard = Array.from(document.querySelectorAll('.blog-card'))
+                                .find(c => c.querySelector(`.read-more[data-id="${id}"]`));
+                            if (targetCard) {
+                                const a = targetCard.querySelector('.full-article');
+                                const link = targetCard.querySelector('.read-more');
+                                a.classList.add('active');
+                                link.textContent = 'Close Article ↑';
+                                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }
+                    });
+                });
             });
         }
 
         renderPosts();
 
+        // ============================================================
+        //  FILTER & SEARCH
+        // ============================================================
         const filterBtns = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('searchInput');
+
         filterBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 activeCategory = this.dataset.filter;
                 renderPosts(activeCategory);
+                const query = searchInput.value.trim().toLowerCase();
+                if (query) filterBySearch(query);
             });
         });
 
-        // ============================================================
-        //  EMAILJS SETUP WITH DEBUGGING
-        // ============================================================
-        const EMAILJS_PUBLIC_KEY = '2a63sraNwt28lQWml';
-        const EMAILJS_SERVICE_ID = 'service_hltwpwg';
-        const NEWSLETTER_TEMPLATE_ID = 'template_joh9chj';
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            if (query === '') { renderPosts(activeCategory); return; }
+            filterBySearch(query);
+        });
 
-        console.log('=== EMAILJS INITIALIZATION ===');
-        console.log('Public Key:', EMAILJS_PUBLIC_KEY);
-        console.log('Service ID:', EMAILJS_SERVICE_ID);
-        console.log('Template ID:', NEWSLETTER_TEMPLATE_ID);
-
-        // Wait for EmailJS to load
-        let emailjsLoaded = false;
-        let emailjsCheckAttempts = 0;
-
-        function checkEmailJS() {
-            emailjsCheckAttempts++;
-            if (typeof emailjs !== 'undefined') {
-                console.log('✅ EmailJS SDK loaded after', emailjsCheckAttempts, 'attempts');
-                emailjsLoaded = true;
-                try {
-                    emailjs.init(EMAILJS_PUBLIC_KEY);
-                    console.log('✅ EmailJS initialized with Public Key');
-                } catch (e) {
-                    console.error('❌ EmailJS init error:', e);
-                }
-            } else {
-                console.warn('⏳ EmailJS not loaded yet, attempt', emailjsCheckAttempts);
-                if (emailjsCheckAttempts < 20) {
-                    setTimeout(checkEmailJS, 500);
-                } else {
-                    console.error('❌ EmailJS failed to load after 10 seconds');
-                }
-            }
+        function filterBySearch(query) {
+            document.querySelectorAll('.blog-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const excerpt = card.querySelector('.blog-excerpt').textContent.toLowerCase();
+                const category = card.dataset.category;
+                const matches = title.includes(query) || excerpt.includes(query) || category.includes(query);
+                card.style.display = matches ? 'block' : 'none';
+            });
         }
 
-        checkEmailJS();
-
         // ============================================================
-        //  NEWSLETTER FORM - WITH DEBUGGING & WHATSAPP FALLBACK
+        //  EMAILJS CONTACT FORM – USING YOUR CREDENTIALS
         // ============================================================
-        document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Page loaded');
 
-            const emailInput = document.getElementById('newsletterEmail');
-            const email = emailInput.value.trim();
-            const msg = document.getElementById('newsletterMessage');
-            const btn = document.getElementById('newsletterBtn');
+            const EMAILJS_PUBLIC_KEY = '2a63sraNwt28lQWml';
+            const EMAILJS_SERVICE_ID = 'service_fqc51hs';
+            const EMAILJS_TEMPLATE_ID = 'template_hkn3vvb';
 
-            if (!email) {
-                msg.style.display = 'block';
-                msg.style.color = '#f87171';
-                msg.textContent = '❌ Please enter your email address.';
-                return;
-            }
+            console.log('📋 Credentials:');
+            console.log('Public Key:', EMAILJS_PUBLIC_KEY);
+            console.log('Service ID:', EMAILJS_SERVICE_ID);
+            console.log('Template ID:', EMAILJS_TEMPLATE_ID);
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
-            msg.style.display = 'none';
-
-            console.log('📤 Newsletter submission for:', email);
-            console.log('EmailJS loaded?', emailjsLoaded);
-
-            const templateParams = {
-                to_email: email,
-                name: email.split('@')[0],
-                email: email,
-                from_name: 'TechNovaphy Newsletter',
-                title: 'Newsletter Subscription'
-            };
-
-            // If EmailJS is not loaded, use WhatsApp fallback
-            if (!emailjsLoaded) {
-                console.warn('⚠️ EmailJS not loaded, using WhatsApp fallback');
-                const whatsappMsg = `Hi TechNovaphy! I'd like to subscribe to the newsletter. My email is: ${email}`;
-                window.open(`https://wa.me/254799269573?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-                msg.style.display = 'block';
-                msg.style.color = '#34d399';
-                msg.textContent = '✅ Opening WhatsApp to confirm subscription...';
-                btn.disabled = false;
-                btn.innerHTML = 'Subscribe';
+            if (typeof emailjs === 'undefined') {
+                console.error('❌ EmailJS SDK not loaded!');
+                document.getElementById('formStatus').className = 'form-status error';
+                document.getElementById('formStatus').textContent = '❌ Email service unavailable. Please contact us directly.';
                 return;
             }
 
             try {
-                console.log('📤 Attempting EmailJS.send()...');
-                const response = await emailjs.send(EMAILJS_SERVICE_ID, NEWSLETTER_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY);
-                
-                console.log('✅ EmailJS SUCCESS:', response);
-                msg.style.display = 'block';
-                msg.style.color = '#34d399';
-                msg.textContent = `✅ Success! Check your email at ${email} 🎉`;
-                emailInput.value = '';
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+                console.log('✅ EmailJS initialized successfully');
             } catch (error) {
-                console.error('❌ EmailJS ERROR:', error);
-                console.error('Error status:', error.status);
-                console.error('Error text:', error.text);
-                
-                // Fallback to WhatsApp
-                console.warn('⚠️ EmailJS failed, using WhatsApp fallback');
-                const whatsappMsg = `Hi TechNovaphy! I'd like to subscribe to the newsletter. My email is: ${email}`;
-                window.open(`https://wa.me/254799269573?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-                
-                msg.style.display = 'block';
-                msg.style.color = '#34d399';
-                msg.textContent = '✅ Opening WhatsApp to confirm subscription...';
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Subscribe';
-                setTimeout(() => msg.style.display = 'none', 8000);
+                console.error('❌ EmailJS init error:', error);
             }
-        });
 
-        console.log('=== FORM SETUP COMPLETE ===');
+            const form = document.getElementById('contactForm');
+            const btn = document.getElementById('contactBtn');
+            const status = document.getElementById('formStatus');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('📤 Form submitted');
+
+                const name = document.getElementById('from_name').value.trim();
+                const company = document.getElementById('company_name').value.trim();
+                const email = document.getElementById('to_email').value.trim();
+                const phone = document.getElementById('phone_number').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                console.log('📧 Name:', name);
+                console.log('📧 Email:', email);
+
+                if (!name || !email) {
+                    status.className = 'form-status error';
+                    status.textContent = '❌ Please fill in your name and email address.';
+                    return;
+                }
+
+                if (!email.includes('@') || !email.includes('.')) {
+                    status.className = 'form-status error';
+                    status.textContent = '❌ Please enter a valid email address.';
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                status.className = 'form-status';
+                status.textContent = '';
+
+                const templateParams = {
+                    from_name: name,
+                    company_name: company || 'Not provided',
+                    to_email: email,
+                    phone_number: phone || 'Not provided',
+                    message: message || 'Newsletter subscription request',
+                    title: 'Blog Contact Form Submission'
+                };
+
+                console.log('📦 Sending with params:', templateParams);
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                    .then(function(response) {
+                        console.log('✅ EmailJS success:', response);
+                        status.className = 'form-status success';
+                        status.textContent = `✅ Thank you ${name}! We've received your message and will get back to you soon.`;
+                        form.reset();
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                        setTimeout(() => { status.className = 'form-status'; }, 8000);
+                    })
+                    .catch(function(error) {
+                        console.error('❌ EmailJS error:', error);
+                        let errorMsg = '❌ Message failed to send. Please try again or contact us on WhatsApp.';
+                        if (error.text) errorMsg += ' Error: ' + error.text;
+                        status.className = 'form-status error';
+                        status.textContent = errorMsg;
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                        setTimeout(() => { status.className = 'form-status'; }, 8000);
+                    });
+            });
+        });
     </script>
 </body>
 </html>
