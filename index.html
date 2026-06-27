@@ -741,26 +741,27 @@
         }
 
         // ============================================================
-        //  EMAILJS CONFIGURATION – USING YOUR KEYS
+        //  EMAILJS CONFIGURATION – ✅ CORRECT IDS
         // ============================================================
         const EMAILJS_PUBLIC_KEY = '2a63sraNwt28lQWml';
-        const EMAILJS_SERVICE_ID = 'service_fqc51hs';
-        const NEWSLETTER_TEMPLATE_ID = 'template_hkn3vvb';
+        const EMAILJS_SERVICE_ID = 'service_hltwpwg';      // ✅ CORRECT
+        const NEWSLETTER_TEMPLATE_ID = 'template_joh9chj';  // ✅ CORRECT
 
-        console.log('🔑 EmailJS Public Key:', EMAILJS_PUBLIC_KEY);
+        console.log('✅ CORRECT IDs LOADED');
+        console.log('🔑 Public Key:', EMAILJS_PUBLIC_KEY);
         console.log('📦 Service ID:', EMAILJS_SERVICE_ID);
         console.log('📝 Template ID:', NEWSLETTER_TEMPLATE_ID);
 
         // Initialize EmailJS
         if (typeof emailjs !== 'undefined') {
             emailjs.init(EMAILJS_PUBLIC_KEY);
-            console.log('✅ EmailJS initialized');
+            console.log('✅ EmailJS initialized successfully');
         } else {
-            console.error('❌ EmailJS SDK not loaded. Check script tag.');
+            console.error('❌ EmailJS SDK not loaded');
         }
 
         // ============================================================
-        //  NEWSLETTER FORM HANDLER
+        //  NEWSLETTER FORM HANDLER – FIXED
         // ============================================================
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -777,44 +778,48 @@
                 return;
             }
 
-            // Disable button and show spinner
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
 
-            // Prepare template parameters – adjust if your template uses different field names
             const templateParams = {
-                to_email: email,                // Sends to the subscriber
-                from_name: email.split('@')[0], // Optional: use part of email as name
-                // If your template expects 'email' instead of 'to_email', change here:
-                // email
+                subscriber_email: email,
+                subscriber_name: email.split('@')[0],
+                email_address: email,
+                from_name: 'TechNovaphy Newsletter'
             };
 
-            console.log('📤 Sending newsletter subscription with params:', templateParams);
+            console.log('📤 Sending with correct IDs...', templateParams);
+
+            const timeout = setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = 'Subscribe';
+                msg.style.display = 'block';
+                msg.style.color = '#f87171';
+                msg.textContent = '❌ Timeout - Check console for details';
+            }, 10000);
 
             emailjs.send(EMAILJS_SERVICE_ID, NEWSLETTER_TEMPLATE_ID, templateParams)
                 .then(function(response) {
-                    console.log('✅ EmailJS success:', response);
+                    clearTimeout(timeout);
+                    console.log('✅ SUCCESS!', response);
                     msg.style.display = 'block';
                     msg.style.color = '#34d399';
-                    msg.textContent = `✅ Subscribed! You'll receive our latest tech insights at ${email}.`;
+                    msg.textContent = `✅ Success! Welcome to TechNovaphy Newsletter 🎉`;
                     emailInput.value = '';
                 })
                 .catch(function(error) {
-                    console.error('❌ EmailJS error:', error);
-                    let errorMsg = '❌ Subscription failed. Please try again.';
-                    if (error.text) {
-                        errorMsg += ' Error: ' + error.text;
-                    }
+                    clearTimeout(timeout);
+                    console.error('❌ Error:', error);
                     msg.style.display = 'block';
                     msg.style.color = '#f87171';
-                    msg.textContent = errorMsg;
+                    msg.textContent = '❌ Subscription failed - Check template variables';
                 })
                 .finally(function() {
                     btn.disabled = false;
                     btn.innerHTML = 'Subscribe';
-                    setTimeout(() => { msg.style.display = 'none'; }, 6000);
+                    setTimeout(() => msg.style.display = 'none', 6000);
                 });
         });
     </script>
 </body>
-                    </html>
+</html>
