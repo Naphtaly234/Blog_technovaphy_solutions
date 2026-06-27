@@ -761,7 +761,7 @@
         }
 
         // ============================================================
-        //  NEWSLETTER FORM HANDLER – FIXED
+        //  NEWSLETTER FORM HANDLER – CORRECT VARIABLE NAMES
         // ============================================================
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -781,14 +781,16 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
 
+            // ✅ CORRECT VARIABLE NAMES FROM YOUR EMAILJS TEMPLATE
             const templateParams = {
-                subscriber_email: email,
-                subscriber_name: email.split('@')[0],
-                email_address: email,
-                from_name: 'TechNovaphy Newsletter'
+                to_email: email,                    // ✅ WHERE to send (recipient)
+                name: email.split('@')[0],          // ✅ Subscriber name
+                email: email,                       // ✅ Reply-to email
+                from_name: 'TechNovaphy Newsletter', // ✅ Display name
+                title: 'Newsletter Subscription'    // ✅ Email title
             };
 
-            console.log('📤 Sending with correct IDs...', templateParams);
+            console.log('📤 Sending newsletter with CORRECT variables:', templateParams);
 
             const timeout = setTimeout(() => {
                 btn.disabled = false;
@@ -804,7 +806,7 @@
                     console.log('✅ SUCCESS!', response);
                     msg.style.display = 'block';
                     msg.style.color = '#34d399';
-                    msg.textContent = `✅ Success! Welcome to TechNovaphy Newsletter 🎉`;
+                    msg.textContent = `✅ Success! Check your email at ${email} 🎉`;
                     emailInput.value = '';
                 })
                 .catch(function(error) {
@@ -822,4 +824,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
